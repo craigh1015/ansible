@@ -1,0 +1,1 @@
+gcloud compute instances delete ansible db1 db2 --zone ${ZONE} --quiet

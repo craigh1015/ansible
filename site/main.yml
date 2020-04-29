@@ -1,0 +1,35 @@
+- hosts: all
+  become: yes
+  tasks:
+
+  - name: Install Dependencies
+    apt:
+      name: software-properties-common
+      state: latest
+
+  # https://downloads.mariadb.org/mariadb/repositories
+  - name: Add repository key to the system
+    apt_key:
+      url: 'https://mariadb.org/mariadb_release_signing_key.asc'
+      state: present
+
+  - name: Install MariaDB repository
+    apt_repository:
+      repo: 'deb [arch=amd64] http://mariadb.mirror.pcextreme.nl/repo/10.3/ubuntu bionic main'
+      state: present
+
+  - name: Ensure apt-get cache is refreshed
+    apt:
+      update_cache: yes
+      cache_valid_time: 36000
+  
+  - name: Install MariaDB Server
+    apt:
+      name: mariadb-server
+      state: latest
+
+  - name: Ensure mariadb is started
+    service:
+      name: mariadb
+      enabled: true
+      state: started
